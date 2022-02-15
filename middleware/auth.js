@@ -36,9 +36,48 @@ function authenticateJWT(req, res, next) {
 function ensureLoggedIn(req, res, next) {
   try {
     if (!res.locals.user) throw new UnauthorizedError();
+    
     return next();
+   
   } catch (err) {
     return next(err);
+  }
+}
+
+
+// /** Middleware to use to ensure admin permission is present in order to modify company information 
+//  * 
+//  * 
+//  * /
+  
+function checkAdmin(req , res , next) {
+  try{
+    if(res.locals.user.isAdmin === true) {
+      return next();
+    }else{
+      throw new UnauthorizedError();
+    }
+  }catch(e) {
+    return next(e)
+  }
+}
+
+
+// *
+// *
+// * Checks to make sure the user that is attempting to modify or delete a user is an Admin or the correct user
+
+
+
+function isAdminOrCorrectUser(req , res , next) {
+  try{
+    if(res.locals.user.isAdmin === true || res.locals.user.username === req.params.username){
+      return next();
+    }else {
+      throw new UnauthorizedError();
+    }
+  }catch(e) {
+    return next(e)
   }
 }
 
@@ -46,4 +85,6 @@ function ensureLoggedIn(req, res, next) {
 module.exports = {
   authenticateJWT,
   ensureLoggedIn,
+  checkAdmin,
+  isAdminOrCorrectUser
 };

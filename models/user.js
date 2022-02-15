@@ -10,6 +10,7 @@ const {
 } = require("../expressError");
 
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
+const jsonwebtoken = require("jsonwebtoken");
 
 /** Related functions for users. */
 
@@ -135,9 +136,15 @@ class User {
         [username],
     );
 
+    
     const user = userRes.rows[0];
-
     if (!user) throw new NotFoundError(`No user: ${username}`);
+
+    const userApplications = await db.query(`SELECT job_id FROM applications WHERE username = $1` , [username]);
+
+    user.applications = userApplications.rows.map(a => a.job_id)
+
+    
 
     return user;
   }
@@ -203,6 +210,26 @@ class User {
     const user = result.rows[0];
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
+  }
+
+
+
+  // * User apply for a job 
+  // * 
+  // * *
+  // * *
+
+  static async apply(username , jobId) {
+    const validUserCheck = await db.query('SELECT * FROM users WHERE username = $1' , [username]);
+    if(validUserCheck.rows.length === 0) {
+      throw new NotFoundError('User does not exist', 400);
+    }
+    const validJobCheck = await db.query(`SELECT * FROM jobs WHERE id = $1` , [jobId]);
+    if(validJobCheck.rows.length === 0) {
+      throw new NotFoundError('Job does not exist' , 400);
+    }
+      await db.query('INSERT INTO applications (username , job_id) VALUES ($1 , $2)' , [username , jobId]);
+    
   }
 }
 

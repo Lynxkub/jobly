@@ -206,3 +206,42 @@ describe("remove", function () {
     }
   });
 });
+
+
+
+
+// ****************************************** filter
+
+
+describe('filter' , function() {
+  test('all params work' , async function () {
+    const reqBody = {
+      name : "c1",
+      minEmployees: 1,
+      maxEmployees: 2
+    }
+   const res = await Company.filter(reqBody);
+   expect(res).toEqual([{
+     description: "Desc1",
+     handle: "c1",
+     logoUrl:"http://c1.img",
+     name:"C1",
+     numEmployees: 1
+   }]);
+
+  })
+  test('min and max work' , async function () {
+    const reqBody = {
+      minEmployees : 0,
+      maxEmployees : 1
+    }
+    const res = await Company.filter(reqBody);
+    expect(res).toEqual([{
+     description: "Desc1",
+     handle: "c1",
+     logoUrl:"http://c1.img",
+     name:"C1",
+     numEmployees: 1
+    }])
+  })
+})

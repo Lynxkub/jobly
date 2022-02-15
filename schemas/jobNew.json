@@ -1,0 +1,84 @@
+
+    {
+        "$schema": "http://json-schema.org/draft-06/schema#",
+        "$ref": "#/definitions/Welcome4",
+        "definitions": {
+            "Welcome4": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "title": {
+                        "$ref": "#/definitions/CompanyHandle"
+                    },
+                    "salary": {
+                        "$ref": "#/definitions/Salary"
+                    },
+                    "equity": {
+                        "$ref": "#/definitions/Equity"
+                    },
+                    "company_handle": {
+                        "$ref": "#/definitions/CompanyHandle"
+                    }
+                },
+                "required": [
+                    "company_handle",
+                    "equity",
+                    "title",
+                    "salary"
+                ],
+                "title": "Welcome4"
+            },
+            "CompanyHandle": {
+                "type": "string",
+                "additionalProperties": false,
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    },
+                    "minLength": {
+                        "type": "integer"
+                    },
+                    "maxLength": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "maxLength",
+                    "minLength",
+                    "type"
+                ],
+                "title": "CompanyHandle"
+            },
+            "Equity": {
+                "type": "string",
+                "additionalProperties": false,
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "type"
+                ],
+                "title": "Equity"
+            },
+            "Salary": {
+                "type": "integer",
+                "additionalProperties": false,
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    },
+                    "minimum": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "minimum",
+                    "type"
+                ],
+                "title": "Salary"
+            }
+        }
+    }
+    

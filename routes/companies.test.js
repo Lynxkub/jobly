@@ -11,14 +11,19 @@ const {
   commonAfterEach,
   commonAfterAll,
   u1Token,
+  u2Token
 } = require("./_testCommon");
+
+
 
 beforeAll(commonBeforeAll);
 beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
-/************************************** POST /companies */
+/************************************** POST /companies
+ * This route requires Admin status. 
+ */
 
 describe("POST /companies", function () {
   const newCompany = {
@@ -60,6 +65,13 @@ describe("POST /companies", function () {
         })
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(400);
+  });
+
+  test("request made from a user that does not have admin status" , async function() {
+    const resp = await request(app).post("/companies").send({
+      ...newCompany
+    }).set("authorization" , `Bearer ${u2Token}`)
+    expect(resp.statusCode).toEqual(401)
   });
 });
 
@@ -202,6 +214,13 @@ describe("PATCH /companies/:handle", function () {
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(400);
   });
+
+  test("request made from a user that does not have admin status" , async function() {
+    const resp = await request(app).patch(`/companies/c1`).send({
+      name: "C1-new",
+    });
+    expect(resp.statusCode).toEqual(401);
+  });
 });
 
 /************************************** DELETE /companies/:handle */
@@ -226,4 +245,15 @@ describe("DELETE /companies/:handle", function () {
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(404);
   });
+
+  // test("request made from a user that does not have admin status" , async function() {
+  //   const resp = await request(app).post("/companies").send({
+  //     ...newCompany
+  //   }).set("authorization" , `Bearer ${u2Token}`)
+  //   expect(resp.statusCode).toEqual(401)
+  // });
+  test("request made from a user that does not have admin status" , async function () {
+    const resp = await request(app).delete(`/companies/c1`);
+    expect(resp.statusCode).toEqual(401);
+  })
 });
