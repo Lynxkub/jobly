@@ -109,7 +109,6 @@ static async filter(filters) {
     if(hasEquity) {
         filterParams.hasEquity = hasEquity;
     }
-    console.log(filterParams);
     if(filterParams.title && filterParams.minSalary && filterParams.hasEquity === true) {
         const results = await db.query(`SELECT title , salary , equity , company_handle FROM jobs WHERE title ILIKE $1 AND salary >= $2 AND equity > 0` , [filterParams.title , filterParams.minSalary]);
         const job = results.rows;

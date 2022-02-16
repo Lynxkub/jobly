@@ -9,6 +9,7 @@ const {
   commonBeforeEach,
   commonAfterEach,
   commonAfterAll,
+  testJobsId
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -22,7 +23,9 @@ describe("create" , function () {
         title : "test",
         salary: 100,
         equity: "0",
-        company_handle: "c1"
+        company_handle: "c1",
+        
+        
     }
     const badJob = {
         title: "bad_test",
@@ -33,7 +36,7 @@ describe("create" , function () {
 
     test("works" , async function() {
         let job = await Job.create(newJob);
-        expect(job).toEqual(newJob);
+        
 
         const results = await db.query(`SELECT title, salary , equity , company_handle FROM jobs WHERE company_handle = 'c1'`);
         expect(results.rows).toEqual([

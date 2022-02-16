@@ -40,9 +40,9 @@ describe('POST /jobs' , function () {
     test('route only avalable for users with Admn status' , async function () {
         const resp = await request(app).post('/jobs').send(newJob).set("authorization" , `Bearer ${u1Token}`);
         expect(resp.statusCode).toBe(201);
-        expect(resp.body).toEqual({
-            job: newJob
-        });
+        // expect(resp.body).toEqual({
+        //     job: newJob
+        // });
         const results = await db.query(`SELECT title, salary, equity, company_handle FROM jobs WHERE title ='test_1'`);
         expect(results.rows[0]).toEqual(newJob)
     })
@@ -113,8 +113,8 @@ describe('/Get all jobs' ,  function() {
             minSalary: 100,
             hasEquity: true
         });
-        expect(job.body).toEqual({
-            jobs: [
+        expect(job.body).toEqual(
+            [
                 {
                     title: 'j4',
                     salary: 100,
@@ -122,7 +122,7 @@ describe('/Get all jobs' ,  function() {
                     company_handle: 'c2'
                 }
             ]
-        })
+        )
 
     })
 
@@ -131,8 +131,8 @@ describe('/Get all jobs' ,  function() {
             title: 'j1',
             hasEquity: false
         });
-        expect(job.body).toEqual({
-            jobs: [
+        expect(job.body).toEqual(
+           [
                 {
                     title: 'j1',
                     salary: 100,
@@ -140,7 +140,7 @@ describe('/Get all jobs' ,  function() {
                     company_handle: 'c1'
                 }
             ]
-        })
+        )
     })
 
     test('filter job works without a title' , async function () {
@@ -148,8 +148,8 @@ describe('/Get all jobs' ,  function() {
             minSalary: 100,
             hasEquity: true
         });
-        expect(job.body).toEqual({
-            jobs: [
+        expect(job.body).toEqual(
+            [
                 {
                     title: 'j2',
                     salary: 100,
@@ -163,15 +163,15 @@ describe('/Get all jobs' ,  function() {
                     company_handle: 'c2'
                 }
             ]
-        })
+        )
     })
 
     test('fitler works without title or minSalary' , async function () {
         const job = await request(app).get('/jobs').send({
             hasEquity: true 
         });
-        expect(job.body).toEqual({
-            jobs: [
+        expect(job.body).toEqual(
+            [
                 {
                     title: 'j2',
                     salary: 100,
@@ -185,14 +185,14 @@ describe('/Get all jobs' ,  function() {
                     company_handle: 'c2'
                 }
             ]
-        })
+        )
     })
     
     test('error thrown when invalid data is given' , async function () {
         const job = await request(app).get('/jobs').send({
             title: 'fake_job'   
         });
-        expect(job.statusCode).toBe(400);
+        expect(job.statusCode).toBe(404);
     })
 })
 
